@@ -1,0 +1,5 @@
+# vim / ide gitignores
+*.swp
+
+# internal testing
+test_output
