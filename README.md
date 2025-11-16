@@ -6,8 +6,8 @@ TODO
 
 # Usage
 
-The tool can be run on an input directory and normalize each of the files within according to given inputs. 
-```Rscript cycombine.r --input <DIRECTORY> --output <DIRECTORY> --method <scale, quantile, etc.> --cofactor <NUMERIC>```
+The tool can be run on an input directory and normalize each of the files within according to given inputs. The following input was used to generate the validation dataset in version 0.1:
+```Rscript cycombine/cycombine.r --input validation/dataset --output validation/cycombine_output --method scale --cofactor 5```
 
 ## Options
 
