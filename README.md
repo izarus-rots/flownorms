@@ -6,7 +6,8 @@ TODO
 
 # Usage
 
-```Rscript ...```
+The tool can be run on an input directory and normalize each of the files within according to given inputs. 
+```Rscript cycombine.r --input <DIRECTORY> --output <DIRECTORY> --method <scale, quantile, etc.> --cofactor <NUMERIC>```
 
 ## Options
 
