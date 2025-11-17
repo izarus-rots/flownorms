@@ -9,6 +9,8 @@ suppressPackageStartupMessages({
   library(ggplot2)
 })
 
+source("cycombine/utils.R")
+
 # arguments ---------------------------------------------------------------
 
 option_list <- list(
@@ -25,29 +27,11 @@ dir_create(opt$output)
 
 # data loading & processing
 
-raw <- list.files(opt$raw, pattern = "\\.fcs\\.txt$", full.names = TRUE)
-norm <- list.files(opt$normalized, pattern = "\\.fcs\\.txt$", full.names = TRUE)
-if (length(raw) == 0) {
-  stop("No .fcs.txt files found in ", opt$raw)
-}
-if (length(normalized) == 0) {
-  stop("No .fcs.txt files found in ", opt$normalized)
-}
+raw_dt <- load_fcs_txt(opt$raw)
+norm_dt <- load_fcs_txt(opt$normalized)
 
-raw_data <- lapply(raw, function(f) {
-  df <- read.table(f, sep = "\t", header = TRUE)
-  df <- as_tibble(df)
-  df$Filename <- basename(f)
-  df$batch <- "Batch1" # dummy batch
-  df
-})
-
-norm_data <- lapply(norm, function(f) {
-  df <- read.table(f, sep = "\t", header = TRUE)
-  df <- as_tibble(df)
-  df$Filename <- basename(f)
-  df
-})
+print(raw_dt, nrows = 4)
+print(norm_dt, nrows = 4)
 
 # metrics
 
