@@ -48,6 +48,3 @@ metrics <- rbindlist(lapply(markers, function(m) {
 # print(metrics)
 
 fwrite(metrics, file.path(opt$output, "summary.tsv"), sep="\t")
-
-# plotting and visualization for comparison
-
