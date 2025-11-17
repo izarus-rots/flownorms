@@ -1,5 +1,7 @@
 # vim / ide gitignores
 *.swp
+.DS_Store
 
 # internal testing
 test_output
+
