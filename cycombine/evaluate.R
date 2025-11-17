@@ -45,6 +45,7 @@ metrics <- rbindlist(lapply(markers, function(m) {
                                 norm_mad <- mad(norm_dt[[m]])
                                 data.table(marker = m, raw_mad=raw_mad, norm_mad=norm_mad)
               }))
-# print(metrics)
+print(markers)
+print(metrics$norm_mad)
 
 fwrite(metrics, file.path(opt$output, "summary.tsv"), sep="\t")
