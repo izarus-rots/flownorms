@@ -7,6 +7,7 @@ suppressPackageStartupMessages({
   library(cyCombine)
   library(tidyverse)
   library(ggplot2)
+  library(data.table)
 })
 
 source("cycombine/utils.R")
@@ -30,10 +31,23 @@ dir_create(opt$output)
 raw_dt <- load_fcs_txt(opt$raw)
 norm_dt <- load_fcs_txt(opt$normalized)
 
-print(raw_dt, nrows = 4)
-print(norm_dt, nrows = 4)
+# print(raw_dt, nrows = 4)
 
 # metrics
+
+markers <- intersect(
+                     setdiff(colnames(raw_dt), c("filename", "batch")),
+                     setdiff(colnames(norm_dt), c("filename", "batch"))
+)
+
+metrics <- rbindlist(lapply(markers, function(m) {
+                                raw_mad <- mad(raw_dt[[m]])
+                                norm_mad <- mad(norm_dt[[m]])
+                                data.table(marker = m, raw_mad=raw_mad, norm_mad=norm_mad)
+              }))
+# print(metrics)
+
+fwrite(metrics, file.path(opt$output, "summary.tsv"), sep="\t")
 
 # plotting and visualization for comparison
 
