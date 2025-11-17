@@ -25,12 +25,16 @@ dir_create(opt$output)
 
 # data loading & processing
 
-files <- list.files(opt$raw, pattern = "\\.fcs\\.txt$", full.names = TRUE)
-if (length(files) == 0) {
+raw <- list.files(opt$raw, pattern = "\\.fcs\\.txt$", full.names = TRUE)
+norm <- list.files(opt$normalized, pattern = "\\.fcs\\.txt$", full.names = TRUE)
+if (length(raw) == 0) {
   stop("No .fcs.txt files found in ", opt$raw)
 }
+if (length(normalized) == 0) {
+  stop("No .fcs.txt files found in ", opt$normalized)
+}
 
-data_list <- lapply(files, function(f) {
+raw_data <- lapply(raw, function(f) {
   df <- read.table(f, sep = "\t", header = TRUE)
   df <- as_tibble(df)
   df$Filename <- basename(f)
@@ -38,8 +42,14 @@ data_list <- lapply(files, function(f) {
   df
 })
 
-# metrics
+norm_data <- lapply(norm, function(f) {
+  df <- read.table(f, sep = "\t", header = TRUE)
+  df <- as_tibble(df)
+  df$Filename <- basename(f)
+  df
+})
 
+# metrics
 
 # plotting and visualization for comparison
 
