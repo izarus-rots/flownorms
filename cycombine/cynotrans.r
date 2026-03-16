@@ -45,12 +45,12 @@ exclude_cols <- c("Filename", "batch")
 markers <- setdiff(colnames(uncorrected), exclude_cols)
 cat("Markers detected:", paste(markers, collapse = ", "), "\n")
 
-# uncorrected <- transform_asinh(
-#   uncorrected,
-#   markers = markers,
-#   cofactor = opt$cofactor,
-#   .keep = TRUE
-# )
+uncorrected <- transform_asinh(
+  uncorrected,
+  markers = markers,
+  cofactor = 1000000,
+  .keep = TRUE
+)
 
 normalized <- normalize(
   df = uncorrected,
