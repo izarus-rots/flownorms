@@ -3,31 +3,55 @@
 # imports -----------------------------------------------------------------
 
 suppressPackageStartupMessages({
-  library(optparse)
   library(cyCombine)
   library(tidyverse)
 })
 
 # arguments ---------------------------------------------------------------
 
-option_list <- list(
-  make_option(c("--input"), type = "character", default = ".",
-              help = "Input directory with preprocessed fcs files"),
-  make_option(c("--method"), type = "character", default = "scale",
-              help = "Normalization method (e.g., scale, quantile, etc.)"),
-  make_option(c("--cofactor"), type = "numeric", default = 5,
-              help = "Cofactor for asinh transformation"),
-  make_option(c("--output"), type = "character", default = "normalized_outputs",
-              help = "Output directory for normalized files")
-)
+args <- commandArgs(trailingOnly = TRUE)
 
-opt <- parse_args(OptionParser(option_list = option_list))
+input_dir <- ""
+method <- "scale"
+cofactor <- NA
+outdir <- "normalized_outputs"
+
+i <- 1
+while (i <= length(args)) {
+	flag <- args[i]
+
+	if (flag == "--input") {
+		input_dir <- args[i + 1]
+		i <- i + 2
+		next
+	}
+
+	if (flag == "--method") {
+		method <- args[i + 1]
+		i <- i + 2
+		next
+	}
+
+	if (flag == "--cofactor") {
+		cofactor <- as.numeric(args[i + 1])
+		i <- i + 2
+		next
+	}
+
+	if (flag == "--outdir") {
+		outdir <- args[i + 1]
+		i <- i + 2
+		next
+	}
+
+	stop(paste("Unknown argument:", flag))
+}
 
 # data loading & processing -----------------------------------------------
 
-files <- list.files(opt$input, pattern = "\\.fcs\\.txt$", full.names = TRUE)
+files <- list.files(input_dir, pattern = "\\.fcs\\.txt$", full.names = TRUE)
 if (length(files) == 0) {
-  stop("No .fcs.txt files found in ", opt$input)
+  stop("No .fcs.txt files found in ", input_dir)
 }
 
 data_list <- lapply(files, function(f) {
@@ -50,24 +74,24 @@ cat("Markers detected:", paste(markers, collapse = ", "), "\n")
 uncorrected <- transform_asinh(
   uncorrected,
   markers = markers,
-  cofactor = opt$cofactor,
+  cofactor = cofactor,
   .keep = TRUE
 )
 
 normalized <- normalize(
   df = uncorrected,
   markers = markers,
-  norm_method = opt$method
+  norm_method = method
 )
 
 # saving ------------------------------------------------------------------
 
-dir.create(opt$output, showWarnings = FALSE, recursive = TRUE)
+dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
 
 by_sample <- split(normalized, normalized$Filename)
 for (nm in names(by_sample)) {
-  out_path <- file.path(opt$output, paste0(nm, "_normalized.txt"))
+  out_path <- file.path(outdir, paste0(nm, "_normalized.txt"))
   write.table(by_sample[[nm]], sep = "\t", row.names = FALSE, quote = FALSE, file = out_path)
 }
 
-cat("Normalization complete. Output written to:", opt$output, "\n")
+cat("Normalization complete. Output written to:", outdir, "\n")
