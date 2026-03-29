@@ -88,7 +88,7 @@ uncorrected <- uncorrected %>%
 cat("Markers detected:", paste(markers, collapse = ", "), "\n")
 
 # arcsinh transform should be optional? w/o multibatch support the
-# normalization process is nonlinear and therefore this will likely make no
+# normalization process is linear and therefore this will likely make no
 # change ...
 
 if (!is.na(cofactor)) {
