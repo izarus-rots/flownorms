@@ -87,12 +87,20 @@ uncorrected <- uncorrected %>%
 
 cat("Markers detected:", paste(markers, collapse = ", "), "\n")
 
-uncorrected <- transform_asinh(
-  uncorrected,
-  markers = markers,
-  cofactor = cofactor,
-  .keep = TRUE
-)
+# arcsinh transform should be optional? w/o multibatch support the
+# normalization process is nonlinear and therefore this will likely make no
+# change ...
+
+if (!is.na(cofactor)) {
+    cat("Applying arcsinh transform...\n")
+
+    uncorrected <- transform_asinh(
+      uncorrected,
+      markers = markers,
+      cofactor = cofactor,
+      .keep = TRUE
+    )
+}
 
 normalized <- normalize(
   df = uncorrected,
