@@ -47,6 +47,17 @@ while (i <= length(args)) {
 	stop(paste("Unknown argument:", flag))
 }
 
+cat("Running cycombine on:", input_dir, "\n")
+cat("Normalization method:", method, "\n")
+if (!is.na(cofactor)) {
+	cat("Arcsinh cofactor:", cofactor, "\n")
+} else {
+	cat("Arcsinh transform: skipped\n")
+}
+
+cat("Output directory:", outdir, "\n")
+
+
 # data loading & processing -----------------------------------------------
 
 files <- list.files(input_dir, pattern = "\\.fcs\\.txt$", full.names = TRUE)
