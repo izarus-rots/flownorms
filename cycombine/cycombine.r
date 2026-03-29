@@ -80,6 +80,11 @@ cat(length(files), "files loaded with", nrow(uncorrected), "cells \n")
 
 exclude_cols <- c("Filename", "batch")
 markers <- setdiff(colnames(uncorrected), exclude_cols)
+
+# remove NA values in marker columns
+uncorrected <- uncorrected %>%
+  filter(if_all(all_of(markers), ~ !is.na(.)))
+
 cat("Markers detected:", paste(markers, collapse = ", "), "\n")
 
 uncorrected <- transform_asinh(
