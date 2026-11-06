@@ -1,5 +1,6 @@
 # flownorms
 implementation of automated and data-driven normalization techniques for flow cytometry data
+
 STATUS: early prototype; largely nonfunctional. cyCombine scale method validated, other methods in progress
 
 # Installation
